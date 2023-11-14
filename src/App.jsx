@@ -2,12 +2,12 @@ import data from "../books.json";
 import Header from "./components/Header";
 import BookList from "./components/BookList";
 import { useEffect, useState } from "react";
-import { AiFillAccountBook } from "react-icons/ai";
 
 function App() {
   const [availableBooks, setAvailableBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [favBooks, setFavBooks] = useState([]);
+  const [favFilteredBooks, setFavFilteredBooks] = useState([]);
   const [genres, setGenres] = useState([]);
   const [genre, setGenre] = useState("All");
   const [pages, setPages] = useState(1000);
@@ -44,28 +44,39 @@ function App() {
   };
 
   const handleFilter = (filter = genre) => {
-    console.log(filter);
     setGenre(filter);
-    setFilteredBooks([
-      ...availableBooks.filter((el) => {
-        const book = el.book;
-        if (filter == "All" && book.pages < pages) return book;
-        if (book.genre == filter && book.pages < pages) return book;
-      }),
-    ]);
   };
 
-  const handlePages = (pagesInput) => {
-    setPages(pagesInput);
+  useEffect(() => {
     setFilteredBooks([
       ...availableBooks.filter((el) => {
         const book = el.book;
-        if (genre == "All" && book.pages < pages) {
-          return book;
-        }
+        if (genre == "All" && book.pages < pages) return book;
         if (book.genre == genre && book.pages < pages) return book;
       }),
     ]);
+
+    setFavFilteredBooks([
+      ...favBooks.filter((el) => {
+        const book = el.book;
+        if (genre == "All" && book.pages < pages) return book;
+        if (book.genre == genre && book.pages < pages) return book;
+      }),
+    ]);
+  }, [genre, pages, favBooks]);
+
+  const handlePages = (pagesInput) => {
+    setPages(pagesInput);
+    // setFilteredBooks([
+    //   ...availableBooks.filter((el) => {
+    //     const book = el.book;
+    //     if (genre == "All" && book.pages < pages) {
+    //       return book;
+    //     }
+    //     if (book.genre == genre && book.pages < pages) return book;
+    //   }),
+    // ]);
+    handleFilter();
   };
 
   const handleFav = (id) => {
@@ -129,7 +140,7 @@ function App() {
         {tab == 0 ? (
           <BookList bookList={filteredBooks} handleFav={handleFav} />
         ) : (
-          <BookList bookList={favBooks} handleFav={handleFav} tab={1} />
+          <BookList bookList={favFilteredBooks} handleFav={handleFav} tab={1} />
         )}
       </main>
     </div>
