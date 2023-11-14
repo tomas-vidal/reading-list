@@ -1,6 +1,6 @@
 import { AiOutlineSearch } from "react-icons/ai";
 
-function Header() {
+function Header({ genres, handleFilter, handlePages, pages }) {
   return (
     <header className="sm:w-3/5 w-screen m-auto border-b-4 pb-5">
       <h1 className="text-5xl pt-20 pb-16">My library</h1>
@@ -16,23 +16,33 @@ function Header() {
         <div className="flex gap-5 w-1/3 items-end">
           <div className="flex flex-col w-1/2 h-[80px]">
             <label className="h-full font-bold">Filter by genre</label>
-            <select className="border text-sm rounded-lg p-2.5 bg-gray-700 border-gray-600 w-full mt-1">
-              <option>Fantasy</option>
-              <option>Fiction</option>
-              <option>Zombie</option>
-              <option>Action</option>
+            <select
+              onChange={(e) => handleFilter(e.target.value)}
+              className="border text-sm rounded-lg p-2.5 bg-gray-700 border-gray-600 w-full mt-1"
+            >
+              {genres.map((genre, i) => {
+                return (
+                  <option value={genre} key={i}>
+                    {genre}
+                  </option>
+                );
+              })}
             </select>
           </div>
           <div className="w-full flex flex-col h-[80px]">
             <label className="h-full font-bold">
               Pages
               <span className="text-sm italic text-white/30 ml-1 font-light">
-                (max. 1000)
+                (max. {pages})
               </span>
             </label>
             <input
-              className="border-2 accent-gray-600 align w-full p-2.5"
+              className="accent-gray-600 align w-full py-2.5"
               type="range"
+              value={pages}
+              onChange={(e) => handlePages(e.target.value)}
+              max="1000"
+              min="1"
             ></input>
           </div>
         </div>

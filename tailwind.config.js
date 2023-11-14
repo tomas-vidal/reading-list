@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       gridTemplateColumns: {
-        4: "repeat(auto-fit, 200px)",
+        4: "repeat(auto-fill, minmax(200px, 1fr))",
       },
     },
   },
