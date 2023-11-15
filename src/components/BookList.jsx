@@ -13,7 +13,7 @@ function BookList({ bookList, handleFav, tab = 0 }) {
 
   return (
     <section>
-      <div className="grid grid-cols-4 items-start gap-4">
+      <div className="grid grid-cols-4 items-start gap-4 lg:pt-5 lg:gap-y-10 lg:justify-items-center">
         {bookList.map((el, i) => {
           const book = el.book;
 

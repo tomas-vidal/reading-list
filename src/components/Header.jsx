@@ -9,10 +9,13 @@ function Header({
   search,
 }) {
   return (
-    <header className="sm:w-3/5 w-screen m-auto pb-5">
+    <header className="md:w-full w-3/5 m-auto pb-5">
       <h1 className="text-5xl pt-20 pb-16">My library</h1>
-      <section className="flex justify-between h-20">
-        <div className="relative w-1/3 self-end">
+      <section
+        className="flex justify-between h-20 lg:h-40
+      lg:flex-col lg:items-center"
+      >
+        <div className="relative w-1/3 self-end lg:self-center lg:w-full">
           <input
             className="border text-sm rounded-lg p-2.5 bg-gray-700 border-gray-600 w-full "
             type="text"
@@ -24,8 +27,8 @@ function Header({
           />
           <AiOutlineSearch className="text-2xl absolute top-1/2 right-[-5px] transform -translate-x-1/2 -translate-y-1/2" />
         </div>
-        <div className="flex gap-5 w-1/3 items-end">
-          <div className="flex flex-col w-1/2 h-[80px]">
+        <div className="flex gap-5 w-96 lg:w-full items-end">
+          <div className="flex flex-col  w-1/2 h-[80px]">
             <label className="h-full font-bold">Filter by genre</label>
             <select
               onChange={(e) => handleFilter(e.target.value)}

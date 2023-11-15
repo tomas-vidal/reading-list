@@ -132,7 +132,7 @@ function App() {
   };
 
   return (
-    <div className="bg-gray-950 text-white min-h-screen font-sans">
+    <div className="bg-gray-950 md:px-5 text-white min-h-screen font-sans">
       <Header
         genres={genres}
         handleFilter={handleFilter}
@@ -141,7 +141,7 @@ function App() {
         handleSearch={handleSearch}
         search={search}
       />
-      <main className="sm:w-3/5 w-screen h-full mx-auto">
+      <main className="md:w-full w-3/5 h-full mx-auto">
         <Tabs
           tab={tab}
           setTab={setTab}
