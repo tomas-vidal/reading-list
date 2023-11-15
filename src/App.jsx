@@ -2,22 +2,24 @@ import data from "../books.json";
 import Header from "./components/Header";
 import BookList from "./components/BookList";
 import { useEffect, useState } from "react";
+import Tabs from "./components/Tabs";
 
 function App() {
   const [availableBooks, setAvailableBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [favBooks, setFavBooks] = useState([]);
   const [favFilteredBooks, setFavFilteredBooks] = useState([]);
+  const [search, setSearch] = useState("");
   const [genres, setGenres] = useState([]);
   const [genre, setGenre] = useState("All");
-  const [pages, setPages] = useState(1000);
+  const [pages, setPages] = useState(1300);
   const [tab, setTab] = useState(0);
 
   useEffect(() => {
     loadLocalJson("../books.json").then((res) => {
       setAvailableBooks(res.library);
       setFilteredBooks(res.library);
-      setFilters(res.library);
+      setFiltersGenres(res.library);
     });
   }, []);
 
@@ -34,7 +36,7 @@ function App() {
       .catch((err) => console.log("Error", err));
   }
 
-  const setFilters = (data) => {
+  const setFiltersGenres = (data) => {
     const filterSet = new Set();
     data.map((el) => {
       const book = el.book;
@@ -43,43 +45,57 @@ function App() {
     setGenres(["All", ...filterSet]);
   };
 
+  useEffect(() => {
+    // filter all books everytime genre, pages, favbooks or search changes
+    setFilteredBooks(filterAll(availableBooks));
+    setFavFilteredBooks(filterAll(favBooks));
+  }, [genre, pages, favBooks, search]);
+
+  const filterAll = (list) => {
+    let filteredList = list;
+
+    if (search) {
+      filteredList = filteredList.filter((item) => {
+        const book = item.book;
+        return book.title.toLowerCase().includes(search.toLowerCase());
+      });
+    }
+
+    if (genre) {
+      filteredList = filteredList.filter((item) => {
+        const book = item.book;
+        if (genre == "All") {
+          return book;
+        } else {
+          return book.genre == genre;
+        }
+      });
+    }
+
+    if (pages) {
+      filteredList = filteredList.filter((item) => {
+        const book = item.book;
+        return book.pages < pages;
+      });
+    }
+
+    return filteredList;
+  };
+
   const handleFilter = (filter = genre) => {
     setGenre(filter);
   };
 
-  useEffect(() => {
-    setFilteredBooks([
-      ...availableBooks.filter((el) => {
-        const book = el.book;
-        if (genre == "All" && book.pages < pages) return book;
-        if (book.genre == genre && book.pages < pages) return book;
-      }),
-    ]);
-
-    setFavFilteredBooks([
-      ...favBooks.filter((el) => {
-        const book = el.book;
-        if (genre == "All" && book.pages < pages) return book;
-        if (book.genre == genre && book.pages < pages) return book;
-      }),
-    ]);
-  }, [genre, pages, favBooks]);
-
   const handlePages = (pagesInput) => {
     setPages(pagesInput);
-    // setFilteredBooks([
-    //   ...availableBooks.filter((el) => {
-    //     const book = el.book;
-    //     if (genre == "All" && book.pages < pages) {
-    //       return book;
-    //     }
-    //     if (book.genre == genre && book.pages < pages) return book;
-    //   }),
-    // ]);
-    handleFilter();
+  };
+
+  const handleSearch = (text) => {
+    setSearch(text);
   };
 
   const handleFav = (id) => {
+    // if you're on lecture tab
     if (tab == 1) {
       const bookFav = favBooks.filter((el) => {
         const book = el.book;
@@ -91,11 +107,11 @@ function App() {
       setFavBooks((prevBooks) => {
         return prevBooks.filter((el) => el.book["ISBN"] !== id);
       });
-      console.log(bookFav);
       setAvailableBooks([...availableBooks, ...bookFav]);
       setFilteredBooks([...filteredBooks, ...bookFav]);
     }
 
+    // if you're on available books tab
     if (tab == 0) {
       const bookFav = availableBooks.filter((el) => {
         const book = el.book;
@@ -122,21 +138,16 @@ function App() {
         handleFilter={handleFilter}
         handlePages={handlePages}
         pages={pages}
+        handleSearch={handleSearch}
+        search={search}
       />
-      <main className="sm:w-3/5 w-screen m-auto">
-        <ul>
-          <li>
-            <button onClick={() => setTab(0)}>
-              Available Books ({availableBooks.length})
-            </button>
-          </li>
-          <li>
-            <button onClick={() => setTab(1)}>
-              Lecture List ({favBooks.length})
-            </button>
-          </li>
-        </ul>
-
+      <main className="sm:w-3/5 w-screen h-full mx-auto">
+        <Tabs
+          tab={tab}
+          setTab={setTab}
+          availableBooks={availableBooks}
+          favBooks={favBooks}
+        />
         {tab == 0 ? (
           <BookList bookList={filteredBooks} handleFav={handleFav} />
         ) : (

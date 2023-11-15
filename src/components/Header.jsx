@@ -1,8 +1,15 @@
 import { AiOutlineSearch } from "react-icons/ai";
 
-function Header({ genres, handleFilter, handlePages, pages }) {
+function Header({
+  genres,
+  handleFilter,
+  handlePages,
+  pages,
+  handleSearch,
+  search,
+}) {
   return (
-    <header className="sm:w-3/5 w-screen m-auto border-b-4 pb-5">
+    <header className="sm:w-3/5 w-screen m-auto pb-5">
       <h1 className="text-5xl pt-20 pb-16">My library</h1>
       <section className="flex justify-between h-20">
         <div className="relative w-1/3 self-end">
@@ -10,6 +17,10 @@ function Header({ genres, handleFilter, handlePages, pages }) {
             className="border text-sm rounded-lg p-2.5 bg-gray-700 border-gray-600 w-full "
             type="text"
             placeholder="Search books"
+            value={search}
+            onChange={(e) => {
+              handleSearch(e.target.value);
+            }}
           />
           <AiOutlineSearch className="text-2xl absolute top-1/2 right-[-5px] transform -translate-x-1/2 -translate-y-1/2" />
         </div>
@@ -41,7 +52,7 @@ function Header({ genres, handleFilter, handlePages, pages }) {
               type="range"
               value={pages}
               onChange={(e) => handlePages(e.target.value)}
-              max="1000"
+              max="1300"
               min="1"
             ></input>
           </div>
