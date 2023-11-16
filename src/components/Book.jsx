@@ -27,7 +27,11 @@ function Book({
           className="w-8 h-8 bg-gray-700 border-gray-600 p-2 rounded hover:bg-gray-500 hover:cursor-pointer transition ml-2 flex-shrink-0"
           onClick={() => handleFav(isbn)}
         >
-          {tab == 0 ? <FaRegStar /> : <LuStarOff />}
+          {tab == 0 ? (
+            <FaRegStar data-testid="favButton" />
+          ) : (
+            <LuStarOff data-testid="removeFavButton" />
+          )}
         </button>
       </div>
 

@@ -6,7 +6,7 @@ function BookList({ bookList, handleFav, tab = 0 }) {
     return (
       <div className="mt-32 flex flex-col items-center gap-10 text-gray-500">
         <FaFaceSadTear className="w-40 h-40" />
-        <h2>¿Qué pasó? No hay libros disponibles</h2>
+        <h2>What happened? There are no books available</h2>
       </div>
     );
   }
