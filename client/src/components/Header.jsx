@@ -1,5 +1,8 @@
 import { AiOutlineSearch } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { Context } from "../context/UserContext";
+import { useContext } from "react";
+import axios from "axios";
 
 function Header({
   genres,
@@ -9,15 +12,39 @@ function Header({
   handleSearch,
   search,
 }) {
+  const { usernameLogged, setUsernameLogged, loading, setLoading } =
+    useContext(Context);
+
+  const handleLogout = () => {
+    axios
+      .post("/logout")
+      .then(() => {
+        setUsernameLogged("");
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <header className="md:w-full w-3/5 m-auto pb-5 relative">
       <div className="absolute right-5 top-5 flex gap-5">
-        <Link to="login">
-          <p className="cursor-pointer"> Login </p>
-        </Link>
-        <Link to="register">
-          <p className="cursor-pointer">Register</p>
-        </Link>
+        {!loading &&
+          (!usernameLogged ? (
+            <>
+              <Link to="login">
+                <p className="cursor-pointer"> Login </p>
+              </Link>
+              <Link to="register">
+                <p className="cursor-pointer">Register</p>
+              </Link>
+            </>
+          ) : (
+            <button onClick={() => handleLogout()}>
+              <p className="cursor-pointer">Logout</p>
+            </button>
+          ))}
       </div>
       <h1 className="text-5xl pt-20 pb-16">My library</h1>
       <section

@@ -1,19 +1,29 @@
 import { Link } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Context } from "../context/UserContext";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
-  const loginForm = async (e) => {
+  const [loginUsername, setLoginUsername] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [logged, setLogged] = useState(false);
+  const { setLoading, loading } = useContext(Context);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     axios
-      .get("/")
+      .post("/login", { username: loginUsername, password: loginPassword })
       .then((res) => {
-        console.log("done");
-        console.log(res);
+        setLogged(true);
+        setLoading(true);
       })
       .catch((e) => {
         console.error(e);
       });
   };
+
+  if (logged) return <Navigate to="/" />;
 
   return (
     <div className="bg-gray-950 text-white h-screen flex items-center font-sans">
@@ -65,6 +75,8 @@ function Login() {
             <input
               className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
               type="email"
+              value={loginUsername}
+              onChange={(e) => setLoginUsername(e.target.value)}
             />
           </div>
           <div className="mt-4">
@@ -79,12 +91,14 @@ function Login() {
             <input
               className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
               type="password"
+              value={loginPassword}
+              onChange={(e) => setLoginPassword(e.target.value)}
             />
           </div>
           <div className="mt-8">
             <button
               className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
-              onClick={(e) => loginForm(e)}
+              onClick={(e) => handleLogin(e)}
               type="submit"
             >
               Login

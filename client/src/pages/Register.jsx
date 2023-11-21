@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
 
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [registered, setRegistered] = useState(false);
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -17,13 +19,15 @@ function Register() {
 
     axios
       .post("/register", { username, password, confirmPassword })
-      .then((response) => {
-        console.log(response);
+      .then(() => {
+        setRegistered(true);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  if (registered) return <Navigate to="/" />;
 
   return (
     <div className="bg-gray-950 h-screen flex items-center font-sans">
@@ -76,55 +80,57 @@ function Register() {
                 </a>
                 <span className="border-b w-1/5 lg:w-1/4"></span>
               </div>
-              <div className="mt-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Username
-                </label>
-                <input
-                  className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
-                  type="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </div>
-              <div className="mt-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Password
-                </label>
-                <input
-                  className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <div className="mt-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Confirm Password
-                </label>
-                <input
-                  className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-              <div className="mt-8">
-                <button
-                  onClick={handleRegister}
-                  type="submit"
-                  className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
-                >
-                  Register
-                </button>
-              </div>
-              <p class="mt-6 text-xs text-gray-600 text-center">
+              <form>
+                <div className="mt-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Username
+                  </label>
+                  <input
+                    className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
+                    type="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                  />
+                </div>
+                <div className="mt-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Password
+                  </label>
+                  <input
+                    className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <div className="mt-4">
+                  <label className="block text-gray-700 text-sm font-bold mb-2">
+                    Confirm Password
+                  </label>
+                  <input
+                    className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </div>
+                <div className="mt-8">
+                  <button
+                    onClick={handleRegister}
+                    type="submit"
+                    className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
+                  >
+                    Register
+                  </button>
+                </div>
+              </form>
+              <p className="mt-6 text-xs text-gray-600 text-center">
                 I agree to abide by BookLibrary's{" "}
-                <a href="#" class="border-b border-gray-500 border-dotted">
+                <a href="#" className="border-b border-gray-500 border-dotted">
                   Terms of Service
                 </a>{" "}
                 and its{" "}
-                <a href="#" class="border-b border-gray-500 border-dotted">
+                <a href="#" className="border-b border-gray-500 border-dotted">
                   Privacy Policy
                 </a>
               </p>

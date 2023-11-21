@@ -7,6 +7,7 @@ import {
 import App from "./App";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import UserContext from "./context/UserContext";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,11 @@ const router = createBrowserRouter([
 ]);
 
 function Routes() {
-  return <RouterProvider router={router} />;
+  return (
+    <UserContext>
+      <RouterProvider router={router} />
+    </UserContext>
+  );
 }
 
 export default Routes;
