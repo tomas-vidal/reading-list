@@ -45,8 +45,9 @@ app.get("/profile", (req, res) => {
   const { token } = req.cookies;
   jwt.verify(token, process.env.SALT_TOKEN, function (err, decoded) {
     if (err) return err;
-    res.send(decoded.username);
+    res.send(decoded.username).end();
   });
+  res.status(401).end();
 });
 
 app.post("/login", async (req, res) => {

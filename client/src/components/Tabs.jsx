@@ -13,7 +13,9 @@ export default function Tabs({ tab, setTab, availableBooks, favBooks }) {
       </li>
       <li>
         <button
-          className={tab == 1 && " bg-gray-600 p-2.5 rounded-md font-semibold"}
+          className={
+            tab == 1 ? " bg-gray-600 p-2.5 rounded-md font-semibold" : ""
+          }
           onClick={() => setTab(1)}
         >
           Lecture List ({favBooks.length})

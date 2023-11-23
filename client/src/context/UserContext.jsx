@@ -7,20 +7,21 @@ function UserContext({ children }) {
   const [usernameLogged, setUsernameLogged] = useState("");
   const [loading, setLoading] = useState(true);
 
-  console.log(loading);
-
   useEffect(() => {
-    console.log("done");
-    axios
-      .get("/profile")
-      .then((response) => {
-        setLoading(false);
-        setUsernameLogged(response.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+    async function auth() {
+      await axios
+        .get("/profile")
+        .then((response) => {
+          setUsernameLogged(response.data);
+        })
+        .catch((err) => {
+          setUsernameLogged("");
+          console.error(err);
+        });
+      setLoading(false);
+    }
+    auth();
+  }, [loading]);
 
   return (
     <Context.Provider

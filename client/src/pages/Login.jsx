@@ -14,7 +14,7 @@ function Login() {
     e.preventDefault();
     axios
       .post("/login", { username: loginUsername, password: loginPassword })
-      .then((res) => {
+      .then(() => {
         setLogged(true);
         setLoading(true);
       })
